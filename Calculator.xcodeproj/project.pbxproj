@@ -193,6 +193,7 @@
 				TargetAttributes = {
 					3E8F46191E9F782E00DA48A7 = {
 						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = 7G68M2SXP9;
 						ProvisioningStyle = Automatic;
 					};
 					3E8F462D1E9F782E00DA48A7 = {
@@ -412,6 +413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 7G68M2SXP9;
 				INFOPLIST_FILE = Calculator/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Group9-iOSUTE.Calculator";
@@ -424,6 +426,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 7G68M2SXP9;
 				INFOPLIST_FILE = Calculator/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Group9-iOSUTE.Calculator";
