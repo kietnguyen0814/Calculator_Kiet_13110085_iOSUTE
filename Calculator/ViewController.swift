@@ -67,10 +67,21 @@ class ViewController: UIViewController {
             if(txtTempResult.text == ""){
                 userInput = Double(txtUserInput.text!)!
                 result = userInput
+                userInput = 0
+                tempResult = 0
+                NSLog("Fuck userInput F= " + String(userInput))
+                NSLog("Fuck tempResult F= " + String(tempResult))
             }
             NSLog("Button Sign =" + String(sign))
             if(sender.tag == 11){ // Percent button action
-                //NSLog(String(result))
+                    txtTempResult.text = String(result)
+                    solve()
+                    tempResult = result
+                    txtSign.text = "%"
+                    txtUserInput.text = String(result)
+                    userInput = 0
+                    txtTempResult.isHidden = true
+                
             }
             else if(sender.tag == 12){ // Divide button action
                 if(sign == false)
@@ -180,36 +191,62 @@ class ViewController: UIViewController {
                 txtUserInput.text = "0"
                 txtSign.text = ""
                 txtTempResult.text = ""
+                sign = false
                 NSLog("Result T= " + String(result))
             }
         }
-        else if(sender.tag == 16){ // Equal button action
-            if (operation == 12){
+            // Equal button action
+        else if(sender.tag == 16){
+            //Bug
+            if (txtTempResult.text == "" && txtSign.text == "") {
+                result = tempResult + userInput
+                txtUserInput.text = String (result)
+                txtTempResult.text = ""
+                txtSign.text = ""
+                result = Double(txtUserInput.text!)!
+            }
+            if (operation == 11){
                 solve()
                 txtUserInput.text = String (result)
                 txtTempResult.text = ""
                 txtSign.text = ""
+            } else if (operation == 12){
+                solve()
+                txtUserInput.text = String (result)
+                txtTempResult.text = ""
+                txtSign.text = ""
+                result = Double(txtUserInput.text!)!
             } else if (operation == 13){
                 solve()
                 txtUserInput.text = String (result)
                 txtTempResult.text = ""
                 txtSign.text = ""
-            }else if (operation == 15){
+            }else if (operation == 14){
                 solve()
                 txtUserInput.text = String (result)
                 txtTempResult.text = ""
                 txtSign.text = ""
-            } else if (operation == 14){
+            } else if (operation == 15){
                 solve()
                 txtUserInput.text = String (result)
                 txtTempResult.text = ""
                 txtSign.text = ""
             }
             txtUserInput.text = String (result)
-            NSLog(String(result))
+            
+            NSLog("Result = " + String(result))
         }
     }
     
+    
+    //Plus/Minus button action
+   /* @IBAction func btnPlusMinus(_ sender: UIButton) {
+        self.userInput = Double(self.txtUserInput.text!)! * -1
+        self.txtUserInput.text = String(self.userInput)
+    }*/
+    
+    
+    // Solve function
     func solve(){
         if(txtSign.text == "+"){
             result = tempResult + userInput
@@ -220,6 +257,8 @@ class ViewController: UIViewController {
             result = tempResult * userInput
         } else if(txtSign.text == "÷"){
             result = tempResult / userInput
+        } else if(txtSign.text == "%"){
+            result = Double(txtUserInput.text!)! / 100
         }
     }
     
