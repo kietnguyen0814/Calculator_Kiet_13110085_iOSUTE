@@ -34,28 +34,33 @@ class ViewController: UIViewController {
     // 0 - 9 button action
     @IBAction func btnNumber(_ sender: UIButton) {
         if( sign == true){
-            if( txtUserInput.text == "0" || txtUserInput.text == "0.0" || txtUserInput.text == "inf")
+            if( isInteger() && (txtUserInput.text == "0" || txtUserInput.text == "inf"))
             {
                 txtUserInput.text = String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
                 sign = false
                 NSLog("userInput F= " + String(userInput))
+                NSLog("Button Sign = " + String(sign))
             }
-            else{
+            else if((isInteger() && (txtUserInput.text != "0" && txtUserInput.text != "inf")) ||
+                    !isInteger() && (txtUserInput.text != "0" && txtUserInput.text != "inf")){
                 txtUserInput.text = "" + String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
                 sign = false
                 NSLog("userInput F= " + String(userInput))
+                NSLog("Button Sign = " + String(sign))
             }
         }
         else {
-            if (txtUserInput.text == "0" || txtUserInput.text == "0.0" || txtUserInput.text == "inf"){
+            if ( isInteger() && (txtUserInput.text == "0" || txtUserInput.text == "inf")){
                 txtUserInput.text = String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
+                NSLog("Button Sign = " + String(sign))
             }
             else {
                 txtUserInput.text = txtUserInput.text! + String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
+                NSLog("Button Sign = " + String(sign))
             }
         }
         btnClear.setTitle("C", for: [.normal])
@@ -69,19 +74,17 @@ class ViewController: UIViewController {
                 result = userInput
                 userInput = 0
                 tempResult = 0
-                NSLog("Fuck userInput F= " + String(userInput))
-                NSLog("Fuck tempResult F= " + String(tempResult))
+                NSLog("userInput F= " + String(userInput))
+                NSLog("tempResult F= " + String(tempResult))
             }
             NSLog("Button Sign =" + String(sign))
             if(sender.tag == 11){ // Percent button action
-                    txtTempResult.text = String(result)
-                    solve()
+                    result = Double(txtUserInput.text!)! / 100
                     tempResult = result
                     txtSign.text = "%"
                     txtUserInput.text = String(result)
                     userInput = 0
                     txtTempResult.isHidden = true
-                
             }
             else if(sender.tag == 12){ // Divide button action
                 if(sign == false)
@@ -188,52 +191,53 @@ class ViewController: UIViewController {
                 userInput = 0
                 result = 0
                 tempResult = 0
+                operation = 0
                 txtUserInput.text = "0"
                 txtSign.text = ""
                 txtTempResult.text = ""
                 sign = false
-                NSLog("Result T= " + String(result))
+                NSLog("Result T = " + String(result))
+                NSLog("Button Sign = " + String(sign))
             }
         }
             // Equal button action
         else if(sender.tag == 16){
+            NSLog("Button Sign = " + String(sign))
             //Bug
-            if (txtTempResult.text == "" && txtSign.text == "") {
+            if (txtTempResult.text == "" && txtSign.text == "" && sign == true) {
                 result = tempResult + userInput
                 txtUserInput.text = String (result)
                 txtTempResult.text = ""
                 txtSign.text = ""
                 result = Double(txtUserInput.text!)!
+            } else if (sign == false && txtTempResult.text == "" && txtSign.text == ""){
+                result = Double(txtUserInput.text!)!
             }
+            NSLog("Operation = " + String(operation))
             if (operation == 11){
-                solve()
-                txtUserInput.text = String (result)
                 txtTempResult.text = ""
                 txtSign.text = ""
             } else if (operation == 12){
-                solve()
+                result = result / userInput
                 txtUserInput.text = String (result)
-                txtTempResult.text = ""
-                txtSign.text = ""
-                result = Double(txtUserInput.text!)!
+                sign = true
             } else if (operation == 13){
-                solve()
+                result = result * userInput
                 txtUserInput.text = String (result)
+                sign = true
+                /*txtUserInput.text = String (result)
                 txtTempResult.text = ""
-                txtSign.text = ""
+                txtSign.text = ""*/
             }else if (operation == 14){
-                solve()
+                result = result - userInput
                 txtUserInput.text = String (result)
-                txtTempResult.text = ""
-                txtSign.text = ""
+                sign = true
             } else if (operation == 15){
-                solve()
+                result = result + userInput
                 txtUserInput.text = String (result)
-                txtTempResult.text = ""
-                txtSign.text = ""
+                sign = true
             }
             txtUserInput.text = String (result)
-            
             NSLog("Result = " + String(result))
         }
     }
@@ -298,6 +302,21 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         //show alert
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    //Check userInput is int or Double
+    func isInteger() -> Bool {
+        let a = Double(txtUserInput.text!)!
+        let b = Int(a)
+        var test = Double()
+        test = a - Double(b)
+        if (test == 0)
+        {
+            return true
+        }
+        else {
+            return false
+        }
     }
    /* func checkCharacter(character: String) -> Bool {
         var countDot : Int = 0
