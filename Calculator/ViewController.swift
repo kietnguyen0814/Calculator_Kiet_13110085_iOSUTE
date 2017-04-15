@@ -16,10 +16,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var txtSign: UILabel!
     @IBOutlet weak var txtUserInput: UILabel!
     
+    var equalFlag: Int = 0 // Bug: press "=" when sign = false -> String userInput = "" + String; when press AC flag turn back "0" ( not yet )
     var result: Double = 0
     var userInput: Double = 0
     var tempResult: Double = 0
-    
     var sign = false
     var operation = 0
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     // 0 - 9 button action
     @IBAction func btnNumber(_ sender: UIButton) {
         if( sign == true){
-            if( isInteger() && (txtUserInput.text == "0" || txtUserInput.text == "inf"))
+            if( isInteger() && txtUserInput.text == "0")
             {
                 txtUserInput.text = String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
@@ -42,9 +42,15 @@ class ViewController: UIViewController {
                 NSLog("userInput F= " + String(userInput))
                 NSLog("Button Sign = " + String(sign))
             }
-            else if((isInteger() && (txtUserInput.text != "0" && txtUserInput.text != "inf")) ||
-                    !isInteger() && (txtUserInput.text != "0" && txtUserInput.text != "inf")){
+            else if((isInteger() && txtUserInput.text != "0") ||
+                    !isInteger() && txtUserInput.text != "inf" && txtUserInput.text != "nan"){
                 txtUserInput.text = "" + String(sender.tag)
+                userInput = Double(txtUserInput.text!)!
+                sign = false
+                NSLog("userInput F= " + String(userInput))
+                NSLog("Button Sign = " + String(sign))
+            } else if(!isInteger() && (txtUserInput.text == "inf" || txtUserInput.text == "nan")){
+                txtUserInput.text = String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
                 sign = false
                 NSLog("userInput F= " + String(userInput))
@@ -52,12 +58,16 @@ class ViewController: UIViewController {
             }
         }
         else {
-            if ( isInteger() && (txtUserInput.text == "0" || txtUserInput.text == "inf")){
+            if (isInteger() && txtUserInput.text == "0"){
                 txtUserInput.text = String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
                 NSLog("Button Sign = " + String(sign))
             }
-            else {
+            else if (isInteger() && txtUserInput.text != "0"){
+                txtUserInput.text = txtUserInput.text! + String(sender.tag)
+                userInput = Double(txtUserInput.text!)!
+                NSLog("Button Sign = " + String(sign))
+            } else{
                 txtUserInput.text = txtUserInput.text! + String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
                 NSLog("Button Sign = " + String(sign))
@@ -65,7 +75,7 @@ class ViewController: UIViewController {
         }
         btnClear.setTitle("C", for: [.normal])
     }	
-    
+
     // Other button action
     @IBAction func btnMath(_ sender: UIButton) {
         if (sender.tag != 10 && sender.tag != 16 && sender.tag != 17) {
@@ -203,7 +213,7 @@ class ViewController: UIViewController {
             // Equal button action
         else if(sender.tag == 16){
             NSLog("Button Sign = " + String(sign))
-            //Bug
+            
             if (txtTempResult.text == "" && txtSign.text == "" && sign == true) {
                 result = tempResult + userInput
                 txtUserInput.text = String (result)
@@ -334,6 +344,10 @@ class ViewController: UIViewController {
     
     //Check userInput is int or Double
     func isInteger() -> Bool {
+        if(txtUserInput.text == "inf" || txtUserInput.text == "nan")
+        {
+            return false
+        }
         let a = Double(txtUserInput.text!)!
         let b = Int(a)
         var isInt = Double()
