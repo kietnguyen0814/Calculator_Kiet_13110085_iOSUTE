@@ -68,7 +68,7 @@ class ViewController: UIViewController {
     
     // Other button action
     @IBAction func btnMath(_ sender: UIButton) {
-        if (sender.tag != 10 && sender.tag != 16) {
+        if (sender.tag != 10 && sender.tag != 16 && sender.tag != 17) {
             if(txtTempResult.text == ""){
                 userInput = Double(txtUserInput.text!)!
                 result = userInput
@@ -240,6 +240,22 @@ class ViewController: UIViewController {
             txtUserInput.text = String (result)
             NSLog("Result = " + String(result))
         }
+        // Plus/Minus Button Action 
+        else if( sender.tag == 17 ){
+            
+            if(Double(txtUserInput.text!)! == 0)
+            {
+                txtUserInput.text = "0"
+            }
+            else if(Double(txtUserInput.text!)! > 0){
+                txtUserInput.text = "-" + String(Double(txtUserInput.text!)!)
+            }
+            else if(Double(txtUserInput.text!)! < 0){
+                txtUserInput.text = String(-1 * Double(txtUserInput.text!)!)
+            }
+            userInput = Double(txtUserInput.text!)!
+            NSLog("userInput = " + String(userInput))
+        }
     }
     
     
@@ -279,6 +295,7 @@ class ViewController: UIViewController {
         NSLog(String(result))*/
     }
     
+    //Function check point
     func checkPoint() -> Bool{
         var countDot : Int = 0
         for character in (txtUserInput.attributedText?.string.characters)!
@@ -296,6 +313,17 @@ class ViewController: UIViewController {
         }
     }
     
+    /*//Function check Negative number
+    func isNegative(character: String) -> Bool{
+        let charIndex = character[character.index(character.startIndex, offsetBy: 0)]
+        if (charIndex == "-"){
+            return true
+        }
+        else{
+            return false
+        }
+    }*/
+    
     func showAlert(){
         let alert = UIAlertController(title: "Error", message: "Wrong Format!!!", preferredStyle: UIAlertControllerStyle.alert)
         //add an action
@@ -308,9 +336,9 @@ class ViewController: UIViewController {
     func isInteger() -> Bool {
         let a = Double(txtUserInput.text!)!
         let b = Int(a)
-        var test = Double()
-        test = a - Double(b)
-        if (test == 0)
+        var isInt = Double()
+        isInt = a - Double(b)
+        if (isInt == 0)
         {
             return true
         }
