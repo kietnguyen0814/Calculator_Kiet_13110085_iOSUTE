@@ -117,6 +117,10 @@ class ViewController: UIViewController {
                 tempResult = result
                 txtSign.text = "%"
                 txtUserInput.text = String(result)
+                if(isInteger())
+                {
+                    txtUserInput.text = String (Int(result))
+                }
                 userInput = 0
                 txtTempResult.isHidden = true
                 dotFlag = 0
@@ -129,6 +133,10 @@ class ViewController: UIViewController {
                     tempResult = result
                     txtSign.text = "÷"
                     txtUserInput.text = String(result)
+                    if(isInteger())
+                    {
+                        txtUserInput.text = String (Int(result))
+                    }
                     userInput = 0
                     NSLog("userInput F= " + String(userInput))
                     NSLog("tempResult F= " + String(tempResult))
@@ -152,6 +160,10 @@ class ViewController: UIViewController {
                     tempResult = result
                     txtSign.text = "×"
                     txtUserInput.text = String(result)
+                    if(isInteger())
+                    {
+                        txtUserInput.text = String (Int(result))
+                    }
                     userInput = 0
                     NSLog("userInput F= " + String(userInput))
                     NSLog("tempResult F= " + String(tempResult))
@@ -175,6 +187,10 @@ class ViewController: UIViewController {
                     tempResult = result
                     txtSign.text = "−"
                     txtUserInput.text = String(result)
+                    if(isInteger())
+                    {
+                        txtUserInput.text = String (Int(result))
+                    }
                     userInput = 0
                     NSLog("userInput F= " + String(userInput))
                     NSLog("tempResult F= " + String(tempResult))
@@ -198,6 +214,10 @@ class ViewController: UIViewController {
                     tempResult = result
                     txtSign.text = "+"
                     txtUserInput.text = String(result)
+                    if(isInteger())
+                    {
+                        txtUserInput.text = String (Int(result))
+                    }
                     userInput = 0
                     NSLog("userInput F= " + String(userInput))
                     NSLog("tempResult F= " + String(tempResult))
