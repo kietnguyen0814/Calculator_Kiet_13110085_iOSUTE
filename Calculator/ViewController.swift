@@ -16,8 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var txtSign: UILabel!
     @IBOutlet weak var txtUserInput: UILabel!
     
-    var equalFlag: Int = 0 // Bug: press "=" when sign = false -> String userInput = "" + String (fix: txtUserInput.text = String(sender.tag)) when press AC flag turn back "0" ( not yet )
-    var dotFlag: Int = 0
+    var equalFlag: Int = 0 // use when equal button is clicked
+    var dotFlag: Int = 0 // use when btnPoint button is clicked
     var result: Double = 0
     var userInput: Double = 0
     var tempResult: Double = 0
@@ -202,8 +202,6 @@ class ViewController: UIViewController {
             if (btnClear.titleLabel?.text == "C") {
                 equalFlag = 0
                 dotFlag = 0
-                /*result = Double(txtResult.text!)! + 1
-                 NSLog(String(result))*/
                 userInput = 0
                 txtUserInput.text = "0"
                 btnClear.setTitle("AC", for: [.normal])
