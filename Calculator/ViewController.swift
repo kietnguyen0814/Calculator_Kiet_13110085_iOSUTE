@@ -16,7 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var txtSign: UILabel!
     @IBOutlet weak var txtUserInput: UILabel!
     
-    var equalFlag: Int = 0 // Bug: press "=" when sign = false -> String userInput = "" + String; when press AC flag turn back "0" ( not yet )
+    var equalFlag: Int = 0 // Bug: press "=" when sign = false -> String userInput = "" + String (fix: txtUserInput.text = String(sender.tag)) when press AC flag turn back "0" ( not yet )
+    var dotFlag: Int = 0
     var result: Double = 0
     var userInput: Double = 0
     var tempResult: Double = 0
@@ -33,8 +34,17 @@ class ViewController: UIViewController {
     }
     // 0 - 9 button action
     @IBAction func btnNumber(_ sender: UIButton) {
+        NSLog("dotFlag = " + String(dotFlag))
+        NSLog("Button Sign = " + String(sign))
+        NSLog("equalFlag = " + String(equalFlag	))
+        
         if( sign == true){
-            if( isInteger() && txtUserInput.text == "0")
+            equalFlag = 0
+            if(dotFlag == 1){
+                txtUserInput.text = txtUserInput.text! + String(sender.tag)
+                userInput = Double(txtUserInput.text!)!
+            }
+            else if( isInteger() && txtUserInput.text == "0")
             {
                 txtUserInput.text = String(sender.tag)
                 userInput = Double(txtUserInput.text!)!
@@ -58,20 +68,34 @@ class ViewController: UIViewController {
             }
         }
         else {
-            if (isInteger() && txtUserInput.text == "0"){
-                txtUserInput.text = String(sender.tag)
-                userInput = Double(txtUserInput.text!)!
-                NSLog("Button Sign = " + String(sign))
+            if (equalFlag == 0 ){
+                if (isInteger() && txtUserInput.text == "0"){
+                    txtUserInput.text = String(sender.tag)
+                    userInput = Double(txtUserInput.text!)!
+                    NSLog("Button Sign = " + String(sign))
+                }
+                else if (isInteger() && txtUserInput.text != "0"){
+                    txtUserInput.text = txtUserInput.text! + String(sender.tag)
+                    userInput = Double(txtUserInput.text!)!
+                    NSLog("Button Sign = " + String(sign))
+                } else{
+                    txtUserInput.text = txtUserInput.text! + String(sender.tag)
+                    userInput = Double(txtUserInput.text!)!
+                    NSLog("Button Sign = " + String(sign))
+                }
             }
-            else if (isInteger() && txtUserInput.text != "0"){
-                txtUserInput.text = txtUserInput.text! + String(sender.tag)
-                userInput = Double(txtUserInput.text!)!
-                NSLog("Button Sign = " + String(sign))
-            } else{
-                txtUserInput.text = txtUserInput.text! + String(sender.tag)
-                userInput = Double(txtUserInput.text!)!
-                NSLog("Button Sign = " + String(sign))
+            else{
+                if( userInput == 0){
+                    txtUserInput.text = String(sender.tag)
+                    userInput = Double(txtUserInput.text!)!
+                }
+                else{
+                    txtUserInput.text = String(sender.tag)
+                    equalFlag = 0
+
+                }
             }
+            
         }
         btnClear.setTitle("C", for: [.normal])
     }	
@@ -89,12 +113,13 @@ class ViewController: UIViewController {
             }
             NSLog("Button Sign =" + String(sign))
             if(sender.tag == 11){ // Percent button action
-                    result = Double(txtUserInput.text!)! / 100
-                    tempResult = result
-                    txtSign.text = "%"
-                    txtUserInput.text = String(result)
-                    userInput = 0
-                    txtTempResult.isHidden = true
+                result = Double(txtUserInput.text!)! / 100
+                tempResult = result
+                txtSign.text = "%"
+                txtUserInput.text = String(result)
+                userInput = 0
+                txtTempResult.isHidden = true
+                dotFlag = 0
             }
             else if(sender.tag == 12){ // Divide button action
                 if(sign == false)
@@ -117,6 +142,7 @@ class ViewController: UIViewController {
                     NSLog("Result T= " + String(result))
                     txtTempResult.isHidden = true
                 }
+                dotFlag = 0
             }
             else if(sender.tag == 13){ // Multiply button action
                 if(sign == false)
@@ -139,6 +165,7 @@ class ViewController: UIViewController {
                     NSLog("Result T= " + String(result))
                     txtTempResult.isHidden = true
                 }
+                dotFlag = 0
             }
             else if(sender.tag == 14){ // Minus button action
                 if(sign == false)
@@ -161,6 +188,7 @@ class ViewController: UIViewController {
                     NSLog("Result T= " + String(result))
                     txtTempResult.isHidden = true
                 }
+                dotFlag = 0
             }
             else if(sender.tag == 15){ // Plus button action
                 if(sign == false)
@@ -183,6 +211,7 @@ class ViewController: UIViewController {
                     NSLog("Result T= " + String(result))
                     txtTempResult.isHidden = true
                 }
+                dotFlag = 0
             }
             sign = true
             operation = sender.tag
@@ -190,6 +219,8 @@ class ViewController: UIViewController {
             // AC button action
         else if(sender.tag == 10){
             if (btnClear.titleLabel?.text == "C") {
+                equalFlag = 0
+                dotFlag = 0
                 /*result = Double(txtResult.text!)! + 1
                  NSLog(String(result))*/
                 userInput = 0
@@ -198,20 +229,25 @@ class ViewController: UIViewController {
                 NSLog("Result T= " + String(result))
             }
             else if (btnClear.titleLabel?.text == "AC"){
+                equalFlag = 0
                 userInput = 0
+                dotFlag = 0
                 result = 0
                 tempResult = 0
                 operation = 0
+                sign = false
                 txtUserInput.text = "0"
                 txtSign.text = ""
                 txtTempResult.text = ""
-                sign = false
                 NSLog("Result T = " + String(result))
                 NSLog("Button Sign = " + String(sign))
+                NSLog("Equal Flag = " + String(equalFlag))
             }
         }
             // Equal button action
         else if(sender.tag == 16){
+            equalFlag = 1
+            dotFlag = 0
             NSLog("Button Sign = " + String(sign))
             
             if (txtTempResult.text == "" && txtSign.text == "" && sign == true) {
@@ -248,7 +284,13 @@ class ViewController: UIViewController {
                 sign = true
             }
             txtUserInput.text = String (result)
+            if(isInteger())
+            {
+                txtUserInput.text = String (Int(result))
+            }
             NSLog("Result = " + String(result))
+            NSLog("Equal Flag = " + String(equalFlag))
+            NSLog("dotFlag = " + String(dotFlag))
         }
         // Plus/Minus Button Action 
         else if( sender.tag == 17 ){
@@ -295,12 +337,53 @@ class ViewController: UIViewController {
     
     // Button "." action
     @IBAction func btnPoint(_ sender: Any) {
-        if (!checkPoint()) {
-            showAlert()
+        NSLog("userInput = " + String(userInput))
+        NSLog("dotFlag = " + String(dotFlag))
+        if(dotFlag == 0 && (txtUserInput.text == "inf" || txtUserInput.text == "nan") && sign == true){
+            txtUserInput.text = "0."
+            dotFlag += 1
         }
-        else{
-            txtUserInput.text = txtUserInput.text! + "."
+        else if(dotFlag == 0 && (txtUserInput.text != "inf" || txtUserInput.text != "nan")){
+            if (!checkPoint()) {
+                txtUserInput.text = "0."
+                dotFlag += 1
+            }
+            else{
+                txtUserInput.text = txtUserInput.text! + "."
+                dotFlag += 1
+            }
+            NSLog("Button Sign = " + String(sign))
+        } else if(dotFlag == 1){
+            if (!checkPoint()) {
+                showAlert()
+            }
+            else{
+                txtUserInput.text = txtUserInput.text! + "."
+            }
         }
+        //if(equalFlag == 0){
+       /* NSLog("userInput F= " + String(userInput))
+            if (!checkPoint()) {
+                txtUserInput.text = "0."
+                NSLog("Button Sign = " + String(sign))
+            }
+            else{
+                txtUserInput.text = txtUserInput.text! + "."
+            }*/
+        equalFlag = 0
+        NSLog("dotFlaf = " + String(dotFlag))
+        //}
+       /* else{
+            if( userInput == 0){
+                txtUserInput.text = String(sender.tag)
+                userInput = Double(txtUserInput.text!)!
+            }
+            else{
+                txtUserInput.text = String(sender.tag)
+                equalFlag = 0
+                
+            }
+        }*/
         /*result = Double(txtResult.text!)!
         NSLog(String(result))*/
     }
