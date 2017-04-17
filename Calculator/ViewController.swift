@@ -300,11 +300,25 @@ class ViewController: UIViewController {
                 txtUserInput.text = "0"
             }
             else if(Double(txtUserInput.text!)! > 0){
-                txtUserInput.text = "-" + String(Double(txtUserInput.text!)!)
+                if(isInteger())
+                {
+                    txtUserInput.text = "-" + String (Int(txtUserInput.text!)!)
+                }
+                else {
+                    txtUserInput.text = "-" + String(Double(txtUserInput.text!)!)
+                }
+                
             }
             else if(Double(txtUserInput.text!)! < 0){
-                txtUserInput.text = String(-1 * Double(txtUserInput.text!)!)
+                if(isInteger())
+                {
+                    txtUserInput.text = String (-1 * Int(txtUserInput.text!)!)
+                }
+                else{
+                    txtUserInput.text = String(-1 * Double(txtUserInput.text!)!)
+                }
             }
+            
             userInput = Double(txtUserInput.text!)!
             NSLog("userInput = " + String(userInput))
         }
@@ -339,11 +353,11 @@ class ViewController: UIViewController {
     @IBAction func btnPoint(_ sender: Any) {
         NSLog("userInput = " + String(userInput))
         NSLog("dotFlag = " + String(dotFlag))
-        if(dotFlag == 0 && (txtUserInput.text == "inf" || txtUserInput.text == "nan") && sign == true){
+        if( dotFlag == 0 && (txtUserInput.text == "inf" || txtUserInput.text == "nan") && sign == true){
             txtUserInput.text = "0."
             dotFlag += 1
         }
-        else if(dotFlag == 0 && (txtUserInput.text != "inf" || txtUserInput.text != "nan")){
+        else if( dotFlag == 0 && (txtUserInput.text != "inf" || txtUserInput.text != "nan")){
             if (!checkPoint()) {
                 txtUserInput.text = "0."
                 dotFlag += 1
@@ -353,7 +367,9 @@ class ViewController: UIViewController {
                 dotFlag += 1
             }
             NSLog("Button Sign = " + String(sign))
-        } else if(dotFlag == 1){
+        } else if(equalFlag == 1 && dotFlag == 0){
+            
+        }else if(dotFlag == 1){
             if (!checkPoint()) {
                 showAlert()
             }
